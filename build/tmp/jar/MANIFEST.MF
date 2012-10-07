@@ -1,4 +1,0 @@
-Manifest-Version: 1.0
-Main-Class: de.banbury.remoteserver.MouseKeysRemoteServer
-Class-Path: . lib/groovy-all-1.8.6.jar lib/log4j-1.2.17.jar
-
