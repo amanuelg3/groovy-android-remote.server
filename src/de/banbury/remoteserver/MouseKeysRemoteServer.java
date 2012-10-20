@@ -102,22 +102,6 @@ public class MouseKeysRemoteServer extends UDPServer {
 		this.mouse = mouse;
 	}
 
-	public int getScrenWidth() {
-		return w;
-	}
-
-	public void setScrennWidth(int w) {
-		this.w = w;
-	}
-
-	public int getScreenHeight() {
-		return h;
-	}
-
-	public void setScreenHeight(int h) {
-		this.h = h;
-	}
-
 	public void respond(DatagramPacket packet) {
 		log.trace("respond");
 		byte[] data = new byte[packet.getLength()];
@@ -1032,17 +1016,6 @@ public class MouseKeysRemoteServer extends UDPServer {
 		log.trace("Application started.");
 
 		try {
-			ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-			gs = ge.getScreenDevices();
-			int w = 0;
-			int h = 0;
-			for (int j = 0; j < gs.length; j++) {
-				gd = gs[j];
-				dm = gd.getDisplayMode();
-				h = dm.getHeight();
-				w = dm.getWidth();
-			}
-
 			String passwd = "";
 			if (args.length > 0)
 				passwd = args[0];
@@ -1050,8 +1023,6 @@ public class MouseKeysRemoteServer extends UDPServer {
 			MouseKeysRemoteServer server = new MouseKeysRemoteServer(passwd);
 			server.setKeyboardHandler(new KeyboardRobotHandler());
 			server.setMouseHandler(new MouseRobotHandler());
-			server.setScrennWidth(w);
-			server.setScreenHeight(h);
 
 			log.info("Starting server...");
 			server.start();
