@@ -3,13 +3,16 @@ package de.banbury.remoteserver.handler
 import java.awt.Robot
 
 class MouseRobotHandler implements IMouseHandler {
-	private Robot robot;
+	private Robot robot
+	private lastx=0, lasty=0
 
 	public MouseRobotHandler() {
 		robot = new Robot();
 	}
 
 	public void move(x, y) {
+		lastx = x;
+		lasty = y;
 		robot.mouseMove(x, y)
 	}
 

@@ -124,7 +124,12 @@ public class MouseKeysRemoteServer extends UDPServer {
 		System.arraycopy(packet.getData(), 0, data, 0, packet.getLength());
 		try {
 			String s = new String(data, "ASCII");
-			if (s.regionMatches(0, passwd, 0, passwd.length())) {
+			if (s.equals("ping")) {
+				log.info("Pinged from " + packet.getAddress() + ":"
+						+ packet.getPort());
+				packet.setData("pong".getBytes("UTF-8"));
+				socket.send(packet);
+			} else if (s.regionMatches(0, passwd, 0, passwd.length())) {
 				String new_s = s.substring(passwd.length());
 				decodeMsg(new_s);
 			} else {
@@ -589,8 +594,7 @@ public class MouseKeysRemoteServer extends UDPServer {
 					keyb.press(KeyEvent.VK_EXCLAMATION_MARK);
 					keyb.release(KeyEvent.VK_EXCLAMATION_MARK);
 					keyb.release(KeyEvent.VK_SHIFT);
-				} else {
-				}
+				} else {}
 			}
 		} else if (keyCode == 34) // "
 		{

@@ -18,7 +18,7 @@ import org.apache.log4j.Logger;
 public abstract class UDPServer extends Thread {
 
 	private int bufferSize; // in bytes
-	protected DatagramSocket ds;
+	protected DatagramSocket socket;
 	private Logger log;
 
 	public UDPServer(int port, int bufferSize) throws SocketException,
@@ -28,7 +28,7 @@ public abstract class UDPServer extends Thread {
 		log.info("Server: " + localHost.getHostName() + "("
 				+ localHost.getHostAddress() + "): " + port);
 		this.bufferSize = bufferSize;
-		this.ds = new DatagramSocket(port);
+		this.socket = new DatagramSocket(port);
 	}
 
 	public UDPServer(int port) throws SocketException, UnknownHostException {
@@ -40,11 +40,10 @@ public abstract class UDPServer extends Thread {
 		while (true) {
 			DatagramPacket incoming = new DatagramPacket(buffer, buffer.length);
 			try {
-				ds.receive(incoming);
-				this.respond(incoming);
+				socket.receive(incoming);
+				respond(incoming);
 			} catch (IOException e) {
 				log.error("Exception", e);
-
 			}
 			yield();
 		} // end while
