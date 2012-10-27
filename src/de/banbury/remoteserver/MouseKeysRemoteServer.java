@@ -31,6 +31,7 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.io.InputStream;
 import java.net.DatagramPacket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
@@ -80,10 +81,23 @@ public class MouseKeysRemoteServer extends UDPServer {
 
 	private String passwd = "";
 
+	private CustomCommands customCommands;
+
 	public MouseKeysRemoteServer() throws SocketException, UnknownHostException {
 		super(DEFAULT_PORT);
-
 		log = Logger.getLogger(this.getClass());
+
+		try {
+			InputStream stream = getClass().getResourceAsStream(
+					"/properties.cfg");
+			if (stream != null)
+				customCommands = new CustomCommands(stream);
+			else
+				log.info("No properties file found.");
+		} catch (Exception ex) {
+			log.error("Configuration cannot be loaded.", ex);
+		}
+
 		mouseMoveX.start();
 		mouseMoveY.start();
 	}
@@ -229,6 +243,8 @@ public class MouseKeysRemoteServer extends UDPServer {
 			handleMZR();
 		} else if (s.regionMatches(0, "NOP", 0, 3)) {
 			return 0;
+		} else if (customCommands.hasCommand(s)) {
+			customCommands.execute(s);
 		} else {
 			log.info("Unknown command!" + s);
 			return -1;
