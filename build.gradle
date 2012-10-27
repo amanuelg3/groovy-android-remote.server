@@ -35,3 +35,11 @@ jar {
 		attributes 'Class-Path': '. ' + manifestClasspath
 	}
 }
+
+task zip(type: Zip, dependsOn: jar) {
+	destinationDir = file(".")
+	archiveName = "GARServer.zip"
+	
+	from "build/libs"
+	from "release"
+}
